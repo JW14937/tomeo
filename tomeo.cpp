@@ -14,8 +14,10 @@
 #include <QMediaPlaylist>
 #include <string>
 #include <vector>
+#include <QTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QFileIconProvider>
 #include <QDesktopServices>
@@ -115,7 +117,6 @@ int main(int argc, char *argv[]) {
     QVBoxLayout *layout = new QVBoxLayout();
     buttonWidget->setLayout(layout);
 
-
     // create the four buttons
     for ( int i = 0; i < 4; i++ ) {
         TheButton *button = new TheButton(buttonWidget);
@@ -130,7 +131,7 @@ int main(int argc, char *argv[]) {
 
     // create the main window and layout
     QWidget window;
-    QHBoxLayout *top = new QHBoxLayout();
+    QGridLayout *top = new QGridLayout();
     window.setLayout(top);
     window.setWindowTitle("tomeo");
     window.setMinimumSize(800, 680);
@@ -138,12 +139,41 @@ int main(int argc, char *argv[]) {
     // ADD CODE BELOW FOR LEFT HAND SIDE
 
     //Creating a Vertical Layout for the left hand side
-    QVBoxLayout *left_layout = new QVBoxLayout;
+    QGridLayout *left_layout = new QGridLayout;
     QWidget* left = new QWidget();
     left->setLayout(left_layout);
 
+    QTextEdit* desc = new QTextEdit();
+    videoWidget->setFixedHeight(350);
+    desc->setFixedHeight(70);
 
-    left_layout->addWidget(videoWidget);
+    //hard coding timestamps
+    QPushButton* time1 = new QPushButton();
+    QPushButton* time2 = new QPushButton();
+    QPushButton* time3 = new QPushButton();
+    time1->setText("timestamp");
+    time2->setText("timestamp");
+    time3->setText("timestamp");
+    QTextEdit* comment1 = new QTextEdit();
+    QTextEdit* comment2 = new QTextEdit();
+    QTextEdit* comment3 = new QTextEdit();
+    comment1->setFixedHeight(30);
+    comment2->setFixedHeight(30);
+    comment3->setFixedHeight(30);
+    //
+
+
+    left_layout->setHorizontalSpacing(20);
+    left_layout->setVerticalSpacing(10);
+    left_layout->addWidget(videoWidget,0,0,1,3);
+    left_layout->addWidget(desc,1,0,1,3);
+    left_layout->addWidget(time1,2,0);
+    left_layout->addWidget(time2,3,0);
+    left_layout->addWidget(time3,4,0);
+    left_layout->addWidget(comment1,2,1,1,2);
+    left_layout->addWidget(comment2,3,1,1,2);
+    left_layout->addWidget(comment3,4,1,1,2);
+
     //
 
     // ADD CODE BELOW FOR RIGHT HAND SIDE
@@ -151,14 +181,13 @@ int main(int argc, char *argv[]) {
     QWidget* right = new QWidget();
     right->setLayout(right_layout);
 
-
     right_layout->addWidget(buttonWidget);
     //
 
 
     // add the video and the buttons to the top level widget
-    top->addWidget(left);
-    top->addWidget(right);
+    top->addWidget(left,0,0,1,2);
+    top->addWidget(right,0,2,1,1);
 
     // showtime!
     window.show();
