@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
     // a list of the buttons
     std::vector<TheButton*> buttons;
     // the buttons are arranged horizontally
-    QHBoxLayout *layout = new QHBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout();
     buttonWidget->setLayout(layout);
 
 
@@ -130,14 +130,35 @@ int main(int argc, char *argv[]) {
 
     // create the main window and layout
     QWidget window;
-    QVBoxLayout *top = new QVBoxLayout();
+    QHBoxLayout *top = new QHBoxLayout();
     window.setLayout(top);
     window.setWindowTitle("tomeo");
     window.setMinimumSize(800, 680);
 
+    // ADD CODE BELOW FOR LEFT HAND SIDE
+
+    //Creating a Vertical Layout for the left hand side
+    QVBoxLayout *left_layout = new QVBoxLayout;
+    QWidget* left = new QWidget();
+    left->setLayout(left_layout);
+
+
+    left_layout->addWidget(videoWidget);
+    //
+
+    // ADD CODE BELOW FOR RIGHT HAND SIDE
+    QVBoxLayout *right_layout = new QVBoxLayout;
+    QWidget* right = new QWidget();
+    right->setLayout(right_layout);
+
+
+    right_layout->addWidget(buttonWidget);
+    //
+
+
     // add the video and the buttons to the top level widget
-    top->addWidget(videoWidget);
-    top->addWidget(buttonWidget);
+    top->addWidget(left);
+    top->addWidget(right);
 
     // showtime!
     window.show();
