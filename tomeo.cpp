@@ -21,6 +21,7 @@
 #include <QComboBox>
 #include <QStandardItem>
 #include <QLineEdit>
+#include <QScrollArea>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QFileIconProvider>
 #include <QDesktopServices>
@@ -105,32 +106,7 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    // the widget that will show the video
-    QVideoWidget *videoWidget = new QVideoWidget;
 
-    // the QMediaPlayer which controls the playback
-    ThePlayer *player = new ThePlayer;
-    player->setVideoOutput(videoWidget);
-
-    // a column of thumbnails
-    QWidget *buttonWidget = new QWidget();
-    // a list of the thumbnails
-    std::vector<TheButton*> buttons;
-    // the thumbnails are arranged vertically
-    QVBoxLayout *layout = new QVBoxLayout();
-    buttonWidget->setLayout(layout);
-
-    // create the four thumbnails
-    for ( int i = 0; i < 4; i++ ) {
-        TheButton *button = new TheButton(buttonWidget);
-        button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
-        buttons.push_back(button);
-        layout->addWidget(button);
-        button->init(&videos.at(i));
-    }
-
-    // tell the player what thumbnails and videos are available
-    player->setContent(&buttons, & videos);
 
     // create the main window and layout
     QWidget window;
@@ -139,14 +115,26 @@ int main(int argc, char *argv[]) {
     window.setWindowTitle("tomeo");
     window.setMinimumSize(800, 680);
 
+
+
     // LEFT HAND SIDE
 
-    //Creating a Vertical Layout for the left hand side
+    // Creating a Vertical Layout for the left hand side
     QGridLayout *left_layout = new QGridLayout;
     QWidget* left = new QWidget();
     left->setLayout(left_layout);
 
-    // Video buttons
+    // the widget that will show the video
+    QVideoWidget *videoWidget = new QVideoWidget;
+    videoWidget->setFixedHeight(350);
+
+    // the QMediaPlayer which controls the playback
+    ThePlayer *player = new ThePlayer;
+    player->setVideoOutput(videoWidget);
+
+
+
+    // video buttons
     QWidget* video_butts = new QWidget();
     QHBoxLayout* video_butts_layout = new QHBoxLayout;
 
@@ -163,54 +151,59 @@ int main(int argc, char *argv[]) {
     video_butts_layout->addWidget(play);
     video_butts_layout->addWidget(speed);
     video_butts_layout->addWidget(next);
-    video_butts_layout->addStretch(20);
+    video_butts_layout->addStretch();
     video_butts_layout->addWidget(zoom);
     video_butts_layout->addWidget(fullscr);
 
     video_butts->setLayout(video_butts_layout);
 
-    // Description
+    // title and description
+    QLineEdit* title = new QLineEdit();
+    title->setPlaceholderText("Video title");
+
     QTextEdit* desc = new QTextEdit();
-    videoWidget->setFixedHeight(350);
+    desc->setPlaceholderText("Video description");
     desc->setFixedHeight(70);
 
-    //hard coding timestamps
-    QPushButton* time1 = new QPushButton();
-    QPushButton* time2 = new QPushButton();
-    QPushButton* time3 = new QPushButton();
-    time1->setText("timestamp");
-    time2->setText("timestamp");
-    time3->setText("timestamp");
-    QTextEdit* comment1 = new QTextEdit();
-    QTextEdit* comment2 = new QTextEdit();
-    QTextEdit* comment3 = new QTextEdit();
-    comment1->setFixedHeight(30);
-    comment2->setFixedHeight(30);
-    comment3->setFixedHeight(30);
+    // timestamps
+    QScrollArea* timestamps_scroll = new QScrollArea();
+    QWidget* timestamps = new QWidget();
+    QGridLayout* timestamps_layout = new QGridLayout();
 
+    for(int i=0; i<10; i++) {
+
+        QPushButton* time = new QPushButton();
+        time->setText("00:00");
+        QLineEdit* comment = new QLineEdit();
+        comment->setPlaceholderText("Timestamp comment");
+
+        timestamps_layout->addWidget(time, i, 0);
+        timestamps_layout->addWidget(comment, i, 1, 1, 3);
+    }
+
+    timestamps->setLayout(timestamps_layout);
+    timestamps_scroll->setWidget(timestamps);
 
     left_layout->setHorizontalSpacing(20);
     left_layout->setVerticalSpacing(10);
-    left_layout->addWidget(videoWidget,0,0,1,3);
-    left_layout->addWidget(video_butts,1,0,1,3);
-    left_layout->addWidget(desc,2,0,1,3);
-    left_layout->addWidget(time1,3,0);
-    left_layout->addWidget(time2,4,0);
-    left_layout->addWidget(time3,5,0);
-    left_layout->addWidget(comment1,3,1,1,2);
-    left_layout->addWidget(comment2,4,1,1,2);
-    left_layout->addWidget(comment3,5,1,1,2);
+    left_layout->addWidget(videoWidget, 0,0,1,3);
+    left_layout->addWidget(video_butts, 1,0,1,3);
+    left_layout->addWidget(title, 2,0,1,3);
+    left_layout->addWidget(desc, 3,0,1,3);
+    left_layout->addWidget(timestamps_scroll, 4,0,1,3);
 
 
     // RIGHT HAND SIDE
     QVBoxLayout *right_layout = new QVBoxLayout;
     QWidget* right = new QWidget();
+    right->setMinimumWidth(300);
+    right->setMaximumWidth(300);
     right->setLayout(right_layout);
 
 
-    // Add filter by tags dropdown
+    // add filter by tags dropdown
 
-    // Tags checkboxes
+    // tags checkboxes
     QStandardItemModel tags_checkboxes(5, 1); // 5 rows for 5 tags, 1 column
 
     QStandardItem* select_tag_prompt = new QStandardItem(QString("-- Select tags --").arg(0));
@@ -225,14 +218,48 @@ int main(int argc, char *argv[]) {
         tags_checkboxes.setItem(i, 0, tag);
     }
 
-    // Filter dropdown
+    // filter dropdown
     QComboBox* filter = new QComboBox();
     filter->setModel(&tags_checkboxes);
 
-    // Add widgets to RHS
-    right_layout->addWidget(filter);
-    right_layout->addWidget(buttonWidget);
+    // video thumbnails
 
+    // a column of thumbnails
+    QWidget *thumbnails_widget = new QWidget();
+    // a list of the thumbnails
+    std::vector<TheButton*> thumbnails;
+    // the thumbnails are arranged vertically
+    QVBoxLayout *thumbnails_layout = new QVBoxLayout();
+    thumbnails_widget->setLayout(thumbnails_layout);
+
+    // create the thumbnails
+    for ( int i = 0; i < 6; i++ ) {
+        TheButton *thumbnail = new TheButton(thumbnails_widget);
+        thumbnail->connect(thumbnail, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
+        thumbnails.push_back(thumbnail);
+        thumbnails_layout->addWidget(thumbnail);
+        // title
+        QLineEdit *title = new QLineEdit();
+        title->setPlaceholderText("Video title");
+        title->setReadOnly(true);
+        thumbnails_layout->addWidget(title);
+        thumbnail->init(&videos.at(i));
+    }
+
+    // tell the player what thumbnails and videos are available
+    player->setContent(&thumbnails, & videos);
+
+    // add thumbnails to scroll area
+    QScrollArea *thumbnails_scroll = new QScrollArea;
+    thumbnails_scroll->setWidget(thumbnails_widget);
+
+    // add widgets to RHS
+    right_layout->addWidget(filter);
+    right_layout->addWidget(thumbnails_scroll);
+
+
+
+    // TOP LEVEL
 
     // add to the top level widget
     top->addWidget(left,0,0,1,2);
