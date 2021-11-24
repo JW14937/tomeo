@@ -146,6 +146,30 @@ int main(int argc, char *argv[]) {
     QWidget* left = new QWidget();
     left->setLayout(left_layout);
 
+    // Video buttons
+    QWidget* video_butts = new QWidget();
+    QHBoxLayout* video_butts_layout = new QHBoxLayout;
+
+    QPushButton *prev = new QPushButton("<<");
+    QPushButton *pause = new QPushButton("||");
+    QPushButton *play = new QPushButton(">");
+    QPushButton *speed = new QPushButton("x1");
+    QPushButton *next = new QPushButton(">>");
+    QPushButton *zoom = new QPushButton("🔍");
+    QPushButton *fullscr = new QPushButton("⛶");
+
+    video_butts_layout->addWidget(prev);
+    video_butts_layout->addWidget(pause);
+    video_butts_layout->addWidget(play);
+    video_butts_layout->addWidget(speed);
+    video_butts_layout->addWidget(next);
+    video_butts_layout->addStretch(20);
+    video_butts_layout->addWidget(zoom);
+    video_butts_layout->addWidget(fullscr);
+
+    video_butts->setLayout(video_butts_layout);
+
+    // Description
     QTextEdit* desc = new QTextEdit();
     videoWidget->setFixedHeight(350);
     desc->setFixedHeight(70);
@@ -168,13 +192,14 @@ int main(int argc, char *argv[]) {
     left_layout->setHorizontalSpacing(20);
     left_layout->setVerticalSpacing(10);
     left_layout->addWidget(videoWidget,0,0,1,3);
-    left_layout->addWidget(desc,1,0,1,3);
-    left_layout->addWidget(time1,2,0);
-    left_layout->addWidget(time2,3,0);
-    left_layout->addWidget(time3,4,0);
-    left_layout->addWidget(comment1,2,1,1,2);
-    left_layout->addWidget(comment2,3,1,1,2);
-    left_layout->addWidget(comment3,4,1,1,2);
+    left_layout->addWidget(video_butts,1,0,1,3);
+    left_layout->addWidget(desc,2,0,1,3);
+    left_layout->addWidget(time1,3,0);
+    left_layout->addWidget(time2,4,0);
+    left_layout->addWidget(time3,5,0);
+    left_layout->addWidget(comment1,3,1,1,2);
+    left_layout->addWidget(comment2,4,1,1,2);
+    left_layout->addWidget(comment3,5,1,1,2);
 
 
     // RIGHT HAND SIDE
