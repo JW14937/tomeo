@@ -18,6 +18,9 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QComboBox>
+#include <QStandardItem>
+#include <QLineEdit>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QFileIconProvider>
 #include <QDesktopServices>
@@ -109,15 +112,15 @@ int main(int argc, char *argv[]) {
     ThePlayer *player = new ThePlayer;
     player->setVideoOutput(videoWidget);
 
-    // a row of buttons
+    // a column of thumbnails
     QWidget *buttonWidget = new QWidget();
-    // a list of the buttons
+    // a list of the thumbnails
     std::vector<TheButton*> buttons;
-    // the buttons are arranged horizontally
+    // the thumbnails are arranged vertically
     QVBoxLayout *layout = new QVBoxLayout();
     buttonWidget->setLayout(layout);
 
-    // create the four buttons
+    // create the four thumbnails
     for ( int i = 0; i < 4; i++ ) {
         TheButton *button = new TheButton(buttonWidget);
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
@@ -126,7 +129,7 @@ int main(int argc, char *argv[]) {
         button->init(&videos.at(i));
     }
 
-    // tell the player what buttons and videos are available
+    // tell the player what thumbnails and videos are available
     player->setContent(&buttons, & videos);
 
     // create the main window and layout
@@ -136,7 +139,7 @@ int main(int argc, char *argv[]) {
     window.setWindowTitle("tomeo");
     window.setMinimumSize(800, 680);
 
-    // ADD CODE BELOW FOR LEFT HAND SIDE
+    // LEFT HAND SIDE
 
     //Creating a Vertical Layout for the left hand side
     QGridLayout *left_layout = new QGridLayout;
@@ -160,7 +163,6 @@ int main(int argc, char *argv[]) {
     comment1->setFixedHeight(30);
     comment2->setFixedHeight(30);
     comment3->setFixedHeight(30);
-    //
 
 
     left_layout->setHorizontalSpacing(20);
@@ -174,18 +176,40 @@ int main(int argc, char *argv[]) {
     left_layout->addWidget(comment2,3,1,1,2);
     left_layout->addWidget(comment3,4,1,1,2);
 
-    //
 
-    // ADD CODE BELOW FOR RIGHT HAND SIDE
+    // RIGHT HAND SIDE
     QVBoxLayout *right_layout = new QVBoxLayout;
     QWidget* right = new QWidget();
     right->setLayout(right_layout);
 
+
+    // Add filter by tags dropdown
+
+    // Tags checkboxes
+    QStandardItemModel tags_checkboxes(5, 1); // 5 rows for 5 tags, 1 column
+
+    QStandardItem* select_tag_prompt = new QStandardItem(QString("-- Select tags --").arg(0));
+    tags_checkboxes.setItem(0, 0, select_tag_prompt);
+
+    for (int i=1; i<=5; i++) {
+        QStandardItem* tag = new QStandardItem(QString("Tag %0").arg(i));
+
+        tag->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        tag->setData(Qt::Unchecked, Qt::CheckStateRole);
+
+        tags_checkboxes.setItem(i, 0, tag);
+    }
+
+    // Filter dropdown
+    QComboBox* filter = new QComboBox();
+    filter->setModel(&tags_checkboxes);
+
+    // Add widgets to RHS
+    right_layout->addWidget(filter);
     right_layout->addWidget(buttonWidget);
-    //
 
 
-    // add the video and the buttons to the top level widget
+    // add to the top level widget
     top->addWidget(left,0,0,1,2);
     top->addWidget(right,0,2,1,1);
 
