@@ -30,7 +30,7 @@ public:
         mTimer = new QTimer(NULL);
         mTimer->setInterval(1000); // 1000ms is one second between ...
         mTimer->start();
-        connect( mTimer, SIGNAL (timeout()), SLOT ( shuffle() ) ); // ...running shuffle method
+        //connect( mTimer, SIGNAL (timeout()), SLOT ( shuffle() ) ); // ...running shuffle method
     }
 
     // all buttons have been setup, store pointers here
