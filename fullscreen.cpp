@@ -18,7 +18,7 @@ fullscreen::fullscreen(){
 
     layout->addWidget(videoWidget);
     window->setLayout(layout);
-    window->setMinimumSize(500,500);
+    window->setWindowState(Qt::WindowMaximized);
     window->show();
 
 }
