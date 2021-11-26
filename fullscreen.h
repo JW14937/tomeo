@@ -7,7 +7,10 @@
 #include <QVBoxLayout>
 #include <QtMultimediaWidgets/QVideoWidget>
 #include <QUrl>
+#include <the_button.h>
+#include <the_player.h>
 
+extern TheButtonInfo* currentButton;
 class fullscreen: public QDialog{
 public:
     fullscreen();

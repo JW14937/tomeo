@@ -3,8 +3,7 @@
 //
 
 #include "the_button.h"
-
-
+TheButtonInfo* currentButton;
 void TheButton::init(TheButtonInfo* i) {
     setIcon( *(i->icon) );
     info =  i;
@@ -12,5 +11,6 @@ void TheButton::init(TheButtonInfo* i) {
 
 
 void TheButton::clicked() {
+    currentButton = info;
     emit jumpTo(info);
 }

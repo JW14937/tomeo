@@ -4,6 +4,7 @@
 
 #include "the_player.h"
 #include "fullscreen.h"
+#include "the_button.h"
 #include <iostream>
 // all buttons have been setup, store pointers here
 

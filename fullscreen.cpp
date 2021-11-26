@@ -13,7 +13,7 @@ fullscreen::fullscreen(){
     player->setVideoOutput(videoWidget);
 
 
-    player->setMedia(QUrl::fromLocalFile("/Users/abelfurhad/Desktop/University of Leeds/Year 2/User Interface/tomeo/videos/f.mp4"));
+    player->setMedia(*currentButton->url);
     player->play();
 
     layout->addWidget(videoWidget);
