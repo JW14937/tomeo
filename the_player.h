@@ -11,7 +11,7 @@
 #include "the_button.h"
 #include <vector>
 #include <QTimer>
-
+#include <string>
 class ThePlayer : public QMediaPlayer {
 
 Q_OBJECT

@@ -5,6 +5,8 @@
 #include <QDialog>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QtMultimediaWidgets/QVideoWidget>
+#include <QUrl>
 
 class fullscreen: public QDialog{
 public:
