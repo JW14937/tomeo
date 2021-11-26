@@ -74,6 +74,7 @@ std::vector<TheButtonInfo> getInfoIn (std::string loc) {
 
 int main(int argc, char *argv[]) {
 
+
     // let's just check that Qt is operational first
     qDebug() << "Qt version: " << QT_VERSION_STR << endl;
 
@@ -156,6 +157,11 @@ int main(int argc, char *argv[]) {
     video_butts_layout->addWidget(fullscr);
 
     video_butts->setLayout(video_butts_layout);
+
+    // Adding functions to buttons above
+    pause->connect(pause, SIGNAL(clicked()), player, SLOT(pause()));
+    play->connect(play, SIGNAL(clicked()), player, SLOT(play()));
+
 
     // title and description
     QLineEdit* title = new QLineEdit();
@@ -248,7 +254,6 @@ int main(int argc, char *argv[]) {
 
     // tell the player what thumbnails and videos are available
     player->setContent(&thumbnails, & videos);
-
     // add thumbnails to scroll area
     QScrollArea *thumbnails_scroll = new QScrollArea;
     thumbnails_scroll->setWidget(thumbnails_widget);
@@ -271,3 +276,4 @@ int main(int argc, char *argv[]) {
     // wait for the app to terminate
     return app.exec();
 }
+

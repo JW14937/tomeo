@@ -13,7 +13,6 @@ class TheButtonInfo {
 public:
     QUrl* url; // video file to play
     QIcon* icon; // icon to display
-
     TheButtonInfo ( QUrl* url, QIcon* icon) : url (url), icon (icon) {}
 };
 
@@ -35,7 +34,6 @@ private slots:
 
 signals:
     void jumpTo(TheButtonInfo*);
-
 };
 
 #endif //CW2_THE_BUTTON_H
