@@ -31,6 +31,7 @@
 #include <QtCore/QDirIterator>
 #include "the_player.h"
 #include "the_button.h"
+#include "fullscreen.h"
 
 // read in videos and thumbnails to this directory
 std::vector<TheButtonInfo> getInfoIn (std::string loc) {
@@ -161,7 +162,7 @@ int main(int argc, char *argv[]) {
     // Adding functions to buttons above
     pause->connect(pause, SIGNAL(clicked()), player, SLOT(pause()));
     play->connect(play, SIGNAL(clicked()), player, SLOT(play()));
-
+    fullscr->connect(fullscr, SIGNAL(clicked()),player,SLOT(fullscreen()));
 
     // title and description
     QLineEdit* title = new QLineEdit();

@@ -3,7 +3,8 @@
 //
 
 #include "the_player.h"
-
+#include "fullscreen.h"
+#include <iostream>
 // all buttons have been setup, store pointers here
 void ThePlayer::setContent(std::vector<TheButton*>* b, std::vector<TheButtonInfo>* i) {
     buttons = b;
@@ -31,4 +32,8 @@ void ThePlayer::playStateChanged (QMediaPlayer::State ms) {
 void ThePlayer::jumpTo (TheButtonInfo* button) {
     setMedia( * button -> url);
     play();
+}
+void ThePlayer::fullscreen(){
+    class fullscreen* test = new class fullscreen();
+    test->setModal(true);
 }
