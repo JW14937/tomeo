@@ -32,6 +32,8 @@
 #include "the_player.h"
 #include "the_button.h"
 #include "fullscreen.h"
+#include <QProgressBar>
+#include "tagging.h"
 
 // read in videos and thumbnails to this directory
 std::vector<TheButtonInfo> getInfoIn (std::string loc) {
@@ -134,8 +136,10 @@ int main(int argc, char *argv[]) {
     ThePlayer *player = new ThePlayer;
     player->setVideoOutput(videoWidget);
 
-
-
+    //Progress Bar
+    QLabel* temp = new QLabel();
+    temp->setText("progress bar");
+    QProgressBar* progressBar = new QProgressBar();
     // video buttons
     QWidget* video_butts = new QWidget();
     QHBoxLayout* video_butts_layout = new QHBoxLayout;
@@ -147,6 +151,7 @@ int main(int argc, char *argv[]) {
     QPushButton *next = new QPushButton(">>");
     QPushButton *zoom = new QPushButton("🔍");
     QPushButton *fullscr = new QPushButton("⛶");
+    QPushButton *add_tag = new QPushButton("add tags");
 
     video_butts_layout->addWidget(prev);
     video_butts_layout->addWidget(pause);
@@ -156,6 +161,7 @@ int main(int argc, char *argv[]) {
     video_butts_layout->addStretch();
     video_butts_layout->addWidget(zoom);
     video_butts_layout->addWidget(fullscr);
+    video_butts_layout->addWidget(add_tag);
 
     video_butts->setLayout(video_butts_layout);
 
@@ -163,6 +169,7 @@ int main(int argc, char *argv[]) {
     pause->connect(pause, SIGNAL(clicked()), player, SLOT(pause()));
     play->connect(play, SIGNAL(clicked()), player, SLOT(play()));
     fullscr->connect(fullscr, SIGNAL(clicked()),player,SLOT(fullscreen()));
+    add_tag->connect(add_tag, SIGNAL(clicked()), player, SLOT(tagging()));
 
     // title and description
     QLineEdit* title = new QLineEdit();
@@ -194,10 +201,12 @@ int main(int argc, char *argv[]) {
     left_layout->setHorizontalSpacing(20);
     left_layout->setVerticalSpacing(10);
     left_layout->addWidget(videoWidget, 0,0,1,3);
-    left_layout->addWidget(video_butts, 1,0,1,3);
-    left_layout->addWidget(title, 2,0,1,3);
-    left_layout->addWidget(desc, 3,0,1,3);
-    left_layout->addWidget(timestamps_scroll, 4,0,1,3);
+    left_layout->addWidget(temp, 1,0,1,1);
+    left_layout->addWidget(progressBar, 1,1,1,2);
+    left_layout->addWidget(video_butts, 2,0,1,3);
+    left_layout->addWidget(title, 3,0,1,3);
+    left_layout->addWidget(desc, 4,0,1,3);
+    left_layout->addWidget(timestamps_scroll, 5,0,1,3);
 
 
     // RIGHT HAND SIDE

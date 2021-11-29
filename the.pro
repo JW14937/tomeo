@@ -9,12 +9,14 @@ CONFIG += c++11
 
 SOURCES += \
         fullscreen.cpp \
+        tagging.cpp \
         the_button.cpp \
         the_player.cpp \
         tomeo.cpp
 
 HEADERS += \
     fullscreen.h \
+    tagging.h \
     the_button.h \
     the_player.h
 
