@@ -32,10 +32,23 @@ void ThePlayer::playStateChanged (QMediaPlayer::State ms) {
 }
 
 void ThePlayer::jumpTo (TheButtonInfo* button) {
+    currVid = button;
     setMedia( * button -> url);
     play();
 }
 void ThePlayer::fullscreen(){
     class fullscreen* test = new class fullscreen();
     test->setModal(true);
+}
+void ThePlayer::nextVid(){
+    TheButtonInfo* button = currVid;
+    currVid = (currVid + 1);
+    setMedia( *(button+1) -> url);
+    play();
+}
+void ThePlayer::prevVid(){
+    TheButtonInfo* button = currVid;
+    currVid = (currVid - 1);
+    setMedia( *(button-1) -> url);
+    play();
 }
