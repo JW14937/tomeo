@@ -32,7 +32,6 @@
 #include "the_player.h"
 #include "the_button.h"
 #include "fullscreen.h"
-
 // read in videos and thumbnails to this directory
 std::vector<TheButtonInfo> getInfoIn (std::string loc) {
 
