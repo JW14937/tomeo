@@ -23,7 +23,7 @@ private:
     long updateCount = 0;
 
 public:
-    TheButtonInfo* currVid;
+
     ThePlayer() : QMediaPlayer(NULL) {
         setVolume(0); // be slightly less annoying
         connect (this, SIGNAL (stateChanged(QMediaPlayer::State)), this, SLOT (playStateChanged(QMediaPlayer::State)) );
@@ -51,6 +51,8 @@ public slots:
     void fullscreen();
     void nextVid();
     void prevVid();
+    void slow();
+    void zoom();
 };
 
 #endif //CW2_THE_PLAYER_H

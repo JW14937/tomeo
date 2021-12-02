@@ -13,7 +13,7 @@ fullscreen::fullscreen(){
     player->setVideoOutput(videoWidget);
 
 
-    player->setMedia(*currentButton->url);
+    player->setMedia(*currVid->url);
     player->play();
 
     layout->addWidget(videoWidget);

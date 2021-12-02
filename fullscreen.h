@@ -10,7 +10,7 @@
 #include <the_button.h>
 #include <the_player.h>
 
-extern TheButtonInfo* currentButton;
+extern TheButtonInfo* currVid;
 class fullscreen: public QDialog{
 public:
     fullscreen();

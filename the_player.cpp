@@ -7,7 +7,7 @@
 #include "the_button.h"
 #include <iostream>
 // all buttons have been setup, store pointers here
-
+TheButtonInfo* currVid;
 void ThePlayer::setContent(std::vector<TheButton*>* b, std::vector<TheButtonInfo>* i) {
     buttons = b;
     infos = i;
@@ -50,5 +50,13 @@ void ThePlayer::prevVid(){
     TheButtonInfo* button = currVid;
     currVid = (currVid - 1);
     setMedia( *(button-1) -> url);
+    play();
+}
+void ThePlayer::slow(){
+    setMedia( *(infos->at(6)). url);
+    play();
+}
+void ThePlayer::zoom(){
+    setMedia( *(infos->back()). url);
     play();
 }

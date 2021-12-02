@@ -53,7 +53,6 @@ std::vector<TheButtonInfo> getInfoIn (std::string loc) {
 #else
             if (f.contains(".mp4") || f.contains("MOV"))  { // mac/linux
 #endif
-
             QString thumb = f.left( f .length() - 4) +".png";
             if (QFile(thumb).exists()) { // if a png thumbnail exists
                 QImageReader *imageReader = new QImageReader(thumb);
@@ -173,6 +172,8 @@ int main(int argc, char *argv[]) {
 
     next->connect(next, SIGNAL(clicked()),player,SLOT(nextVid()));
     prev->connect(prev, SIGNAL(clicked()),player,SLOT(prevVid()));
+    speed->connect(speed, SIGNAL(clicked()), player, SLOT(slow()));
+    zoom->connect(zoom, SIGNAL(clicked()), player, SLOT(zoom()));
 
     add_tag->connect(add_tag, SIGNAL(clicked()), player, SLOT(tagging()));
 
