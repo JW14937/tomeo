@@ -6,6 +6,11 @@
 #include "fullscreen.h"
 #include "the_button.h"
 #include <iostream>
+#include "tagging.h"
+#include <fstream>
+#include <QDebug>
+#include <QFile>
+
 // all buttons have been setup, store pointers here
 TheButtonInfo* currVid;
 void ThePlayer::setContent(std::vector<TheButton*>* b, std::vector<TheButtonInfo>* i) {
@@ -60,3 +65,23 @@ void ThePlayer::zoom(){
     setMedia( *(infos->back()). url);
     play();
 }
+void ThePlayer::tagging(){
+    class tagging* test = new class tagging();
+    test->setModal(true);
+}
+void ThePlayer::writeToFile(QString timeInput, QString commentInput){
+//    QString filename = "abc.txt";
+//    QFile file(filename);
+//    if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+//        QTextStream stream(&file);
+        qDebug() << qPrintable(timeInput);
+        qDebug() << qPrintable(commentInput);
+        qDebug() << "tedst";
+
+//        stream << timeLine << endl;
+//        stream << cmt << endl;
+//    }
+//    file.close();
+}
+
+

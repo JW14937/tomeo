@@ -150,7 +150,8 @@ int main(int argc, char *argv[]) {
     QPushButton *next = new QPushButton(">>");
     QPushButton *zoom = new QPushButton("🔍");
     QPushButton *fullscr = new QPushButton("⛶");
-    QPushButton *add_tag = new QPushButton("add tags");
+    QPushButton *add_tag = new QPushButton("Tags");
+//    QPushButton *add_timestamp = new QPushButton("add timestamps");
 
     video_butts_layout->addWidget(prev);
     video_butts_layout->addWidget(pause);
@@ -185,22 +186,43 @@ int main(int argc, char *argv[]) {
     desc->setPlaceholderText("Video description");
     desc->setFixedHeight(70);
 
-    // timestamps
+
+    //timestamps
+    QLabel* time_label = new QLabel("Time");
+
+    QLineEdit* time = new QLineEdit();
+    time->setPlaceholderText("00:00");
+
+    QLabel* comment_label = new QLabel("Comment");
+
+    QLineEdit* comment = new QLineEdit();
+    comment->setPlaceholderText("Timestamp comment");
+
+
+
+    //timestamp button
+    QPushButton *add_timestamp = new QPushButton("save timestamp");
+    add_timestamp->connect(add_timestamp, SIGNAL(clicked()), player, SLOT(writeToFile(time->text(), comment->text())));
+    //
     QScrollArea* timestamps_scroll = new QScrollArea();
     QWidget* timestamps = new QWidget();
     QGridLayout* timestamps_layout = new QGridLayout();
 
-    for(int i=0; i<10; i++) {
+//    for(int i=0; i<10; i++) {
 
-        QPushButton* time = new QPushButton();
-        time->setText("00:00");
-        QLineEdit* comment = new QLineEdit();
-        comment->setPlaceholderText("Timestamp comment");
+//        QPushButton* time = new QPushButton();
+//        time->setText("00:00");
+//        QLineEdit* comment = new QLineEdit();
+//        comment->setPlaceholderText("Timestamp comment");
 
-        timestamps_layout->addWidget(time, i, 0);
-        timestamps_layout->addWidget(comment, i, 1, 1, 3);
-    }
-
+//        timestamps_layout->addWidget(time, i, 0);
+//        timestamps_layout->addWidget(comment, i, 1, 1, 3);
+//    }
+    timestamps_layout->addWidget(time_label, 0,0);
+    timestamps_layout->addWidget(comment_label,0,1,1,3);
+    timestamps_layout->addWidget(time, 1,0);
+    timestamps_layout->addWidget(comment,1,1,1,3);
+    timestamps_layout->addWidget(add_timestamp);
     timestamps->setLayout(timestamps_layout);
     timestamps_scroll->setWidget(timestamps);
 
@@ -212,7 +234,8 @@ int main(int argc, char *argv[]) {
     left_layout->addWidget(video_butts, 2,0,1,3);
     left_layout->addWidget(title, 3,0,1,3);
     left_layout->addWidget(desc, 4,0,1,3);
-    left_layout->addWidget(timestamps_scroll, 5,0,1,3);
+//    left_layout->addWidget(add_timestamp, 5,0,1,1);
+    left_layout->addWidget(timestamps_scroll, 6,0,1,3);
 
 
     // RIGHT HAND SIDE
