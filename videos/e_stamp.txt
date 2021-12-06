@@ -1,0 +1,6 @@
+00:00:05
+red truck
+00:00:07
+motorcycle
+00:00:12
+white car

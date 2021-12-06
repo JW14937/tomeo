@@ -24,6 +24,7 @@ private:
     long updateCount = 0;
 
 public:
+    QString* currently_playing;
     ThePlayer() : QMediaPlayer(NULL) {
         setVolume(0); // be slightly less annoying
         connect (this, SIGNAL (stateChanged(QMediaPlayer::State)), this, SLOT (playStateChanged(QMediaPlayer::State)) );
@@ -36,6 +37,7 @@ public:
 
     // all buttons have been setup, store pointers here
     void setContent(std::vector<TheButton*>* b, std::vector<TheButtonInfo>* i);
+
 
 private slots:
 
@@ -55,6 +57,9 @@ public slots:
     void zoom();
     void tagging();
     void writeToFile(QString timeInput, QString commentInput);
+
+signals:
+    void updated_video();
 };
 
 #endif //CW2_THE_PLAYER_H

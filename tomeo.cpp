@@ -34,6 +34,8 @@
 #include "fullscreen.h"
 #include <QProgressBar>
 #include "tagging.h"
+#include "timestamps.h"
+#include "add_timestamp.h"
 
 // read in videos and thumbnails to this directory
 std::vector<TheButtonInfo> getInfoIn (std::string loc) {
@@ -135,10 +137,6 @@ int main(int argc, char *argv[]) {
     ThePlayer *player = new ThePlayer;
     player->setVideoOutput(videoWidget);
 
-    //Progress Bar
-    QLabel* temp = new QLabel();
-    temp->setText("progress bar");
-    QProgressBar* progressBar = new QProgressBar();
     // video buttons
     QWidget* video_butts = new QWidget();
     QHBoxLayout* video_butts_layout = new QHBoxLayout;
@@ -186,56 +184,43 @@ int main(int argc, char *argv[]) {
     desc->setPlaceholderText("Video description");
     desc->setFixedHeight(70);
 
+    // display timestamps
 
-    //timestamps
-    QLabel* time_label = new QLabel("Time");
-
-    QLineEdit* time = new QLineEdit();
-    time->setPlaceholderText("00:00");
-
-    QLabel* comment_label = new QLabel("Comment");
-
-    QLineEdit* comment = new QLineEdit();
-    comment->setPlaceholderText("Timestamp comment");
+    Timestamps* timestamps_layout = new Timestamps();
+    timestamps_layout->set_player(player);
+    timestamps_layout->set_vid_location(QString::fromStdString(std::string(argv[1])));
 
 
+    // video changed = load new timestamps
+    player->connect(player, SIGNAL(updated_video()), timestamps_layout, SLOT(load_from_file()));
 
-    //timestamp button
-    QPushButton *add_timestamp = new QPushButton("save timestamp");
-    add_timestamp->connect(add_timestamp, SIGNAL(clicked()), player, SLOT(writeToFile(time->text(), comment->text())));
-    //
-    QScrollArea* timestamps_scroll = new QScrollArea();
     QWidget* timestamps = new QWidget();
-    QGridLayout* timestamps_layout = new QGridLayout();
-
-//    for(int i=0; i<10; i++) {
-
-//        QPushButton* time = new QPushButton();
-//        time->setText("00:00");
-//        QLineEdit* comment = new QLineEdit();
-//        comment->setPlaceholderText("Timestamp comment");
-
-//        timestamps_layout->addWidget(time, i, 0);
-//        timestamps_layout->addWidget(comment, i, 1, 1, 3);
-//    }
-    timestamps_layout->addWidget(time_label, 0,0);
-    timestamps_layout->addWidget(comment_label,0,1,1,3);
-    timestamps_layout->addWidget(time, 1,0);
-    timestamps_layout->addWidget(comment,1,1,1,3);
-    timestamps_layout->addWidget(add_timestamp);
     timestamps->setLayout(timestamps_layout);
+
+    QScrollArea* timestamps_scroll = new QScrollArea();
     timestamps_scroll->setWidget(timestamps);
+    timestamps_scroll->setWidgetResizable(true);
+
+
+    // add new timestamp
+    QWidget* add_stamp_widget = new QWidget();
+    AddTimestamp* add_stamp_layout = new AddTimestamp();
+    timestamps_layout->set_stamp_adder(add_stamp_layout);
+
+    QPushButton *add_stamp_button = new QPushButton("add new timestamp");
+    add_stamp_button->connect(add_stamp_button, SIGNAL(clicked()), timestamps_layout, SLOT(add_timestamp()));
+    add_stamp_layout->addWidget(add_stamp_button);
+    add_stamp_widget->setLayout(add_stamp_layout);
+    add_stamp_widget->setFixedWidth(750);
 
     left_layout->setHorizontalSpacing(20);
     left_layout->setVerticalSpacing(10);
     left_layout->addWidget(videoWidget, 0,0,1,3);
-    left_layout->addWidget(temp, 1,0,1,1);
-    left_layout->addWidget(progressBar, 1,1,1,2);
-    left_layout->addWidget(video_butts, 2,0,1,3);
-    left_layout->addWidget(title, 3,0,1,3);
-    left_layout->addWidget(desc, 4,0,1,3);
-//    left_layout->addWidget(add_timestamp, 5,0,1,1);
-    left_layout->addWidget(timestamps_scroll, 6,0,1,3);
+    left_layout->addWidget(video_butts, 1,0,1,3);
+    left_layout->addWidget(title, 2,0,1,3);
+    left_layout->addWidget(desc, 3,0,1,3);
+    left_layout->addWidget(timestamps_scroll, 5,0,1,3);
+    left_layout->addWidget(add_stamp_widget, 6,0,1,1);
 
 
     // RIGHT HAND SIDE

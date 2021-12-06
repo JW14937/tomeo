@@ -8,17 +8,21 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        add_timestamp.cpp \
         fullscreen.cpp \
         tagging.cpp \
         the_button.cpp \
         the_player.cpp \
+        timestamps.cpp \
         tomeo.cpp
 
 HEADERS += \
+    add_timestamp.h \
     fullscreen.h \
     tagging.h \
     the_button.h \
-    the_player.h
+    the_player.h \
+    timestamps.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

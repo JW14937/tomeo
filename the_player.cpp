@@ -36,9 +36,13 @@ void ThePlayer::playStateChanged (QMediaPlayer::State ms) {
     }
 }
 
+
 void ThePlayer::jumpTo (TheButtonInfo* button) {
     currVid = button;
     setMedia( * button -> url);
+    QString video_name = button->url->toString();
+    currently_playing = new QString(video_name);
+    updated_video();
     play();
 }
 void ThePlayer::fullscreen(){
@@ -84,4 +88,7 @@ void ThePlayer::writeToFile(QString timeInput, QString commentInput){
 //    file.close();
 }
 
+void updated_video() {
+
+}
 
