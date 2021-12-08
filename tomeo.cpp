@@ -33,10 +33,10 @@
 #include "the_button.h"
 #include "fullscreen.h"
 #include <QProgressBar>
-#include "tagging.h"
 #include "timestamps.h"
 #include "add_timestamp.h"
 #include "description.h"
+#include "tags.h"
 
 int nr_videos = 0;
 
@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
     QGridLayout *top = new QGridLayout();
     window.setLayout(top);
     window.setWindowTitle("tomeo");
-    window.setMinimumSize(800, 680);
+    window.setMinimumSize(800, 850);
 
 
 
@@ -152,8 +152,6 @@ int main(int argc, char *argv[]) {
     QPushButton *next = new QPushButton(">>");
     QPushButton *zoom = new QPushButton("🔍");
     QPushButton *fullscr = new QPushButton("⛶");
-    QPushButton *add_tag = new QPushButton("Tags");
-//    QPushButton *add_timestamp = new QPushButton("add timestamps");
 
     video_butts_layout->addWidget(prev);
     video_butts_layout->addWidget(pause);
@@ -163,7 +161,6 @@ int main(int argc, char *argv[]) {
     video_butts_layout->addStretch();
     video_butts_layout->addWidget(zoom);
     video_butts_layout->addWidget(fullscr);
-    video_butts_layout->addWidget(add_tag);
 
     video_butts->setLayout(video_butts_layout);
 
@@ -178,7 +175,21 @@ int main(int argc, char *argv[]) {
     speed->connect(speed, SIGNAL(clicked()), player, SLOT(slow()));
     zoom->connect(zoom, SIGNAL(clicked()), player, SLOT(zoom()));
 
-    add_tag->connect(add_tag, SIGNAL(clicked()), player, SLOT(tagging()));
+    // tags
+
+    Tags* tags_layout = new Tags();
+    tags_layout->set_player(player);
+    tags_layout->set_vid_location(QString::fromStdString(std::string(argv[1])));
+
+    player->connect(player, SIGNAL(updated_video()), tags_layout, SLOT(load_from_file()));
+
+    QWidget* tags_widget = new QWidget();
+    tags_widget->setLayout(tags_layout);
+
+    QScrollArea* tags_scroll = new QScrollArea();
+    tags_scroll->setWidget(tags_widget);
+    tags_scroll->setWidgetResizable(true);
+    tags_scroll->setMinimumHeight(30);
 
     // title and description
 
@@ -218,13 +229,15 @@ int main(int argc, char *argv[]) {
     add_stamp_widget->setLayout(add_stamp_layout);
     add_stamp_widget->setFixedWidth(750);
 
+
     left_layout->setHorizontalSpacing(20);
     left_layout->setVerticalSpacing(10);
     left_layout->addWidget(videoWidget, 0,0,1,3);
     left_layout->addWidget(video_butts, 1,0,1,3);
-    left_layout->addWidget(description_widget, 2,0,1,3);
-    left_layout->addWidget(add_stamp_widget, 3,0,1,3);
+    left_layout->addWidget(tags_scroll, 2,0,1,3);
+    left_layout->addWidget(description_widget, 3,0,1,3);
     left_layout->addWidget(timestamps_scroll, 4,0,1,3);
+    left_layout->addWidget(add_stamp_widget, 5,0,1,3);
 
 
     // RIGHT HAND SIDE
@@ -237,24 +250,6 @@ int main(int argc, char *argv[]) {
 
     // add filter by tags dropdown
 
-    // tags checkboxes
-    QStandardItemModel tags_checkboxes(5, 1); // 5 rows for 5 tags, 1 column
-
-    QStandardItem* select_tag_prompt = new QStandardItem(QString("-- Select tags --").arg(0));
-    tags_checkboxes.setItem(0, 0, select_tag_prompt);
-
-    for (int i=1; i<=5; i++) {
-        QStandardItem* tag = new QStandardItem(QString("Tag %0").arg(i));
-
-        tag->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        tag->setData(Qt::Unchecked, Qt::CheckStateRole);
-
-        tags_checkboxes.setItem(i, 0, tag);
-    }
-
-    // filter dropdown
-    QComboBox* filter = new QComboBox();
-    filter->setModel(&tags_checkboxes);
 
     // video thumbnails
 
@@ -283,12 +278,53 @@ int main(int argc, char *argv[]) {
         title->setText(video_name);
         thumbnails_layout->addWidget(title);
     }
+    thumbnails_layout->addStretch();
 
     // tell the player what thumbnails and videos are available
+
     player->setContent(&thumbnails, & videos);
+
     // add thumbnails to scroll area
     QScrollArea *thumbnails_scroll = new QScrollArea;
     thumbnails_scroll->setWidget(thumbnails_widget);
+
+    // tags checkboxes
+    QStandardItemModel tags_checkboxes(3, 1);
+
+    QStandardItem* select_tag_prompt = new QStandardItem(QString("-- Select tags --").arg(0));
+    tags_checkboxes.setItem(0, 0, select_tag_prompt);
+
+    for (int i=1; i<=3; i++) {
+        QString tag_name;
+        switch (i) {
+        case 1:
+            tag_name = "panda";
+            break;
+        case 2:
+            tag_name = "japan";
+            break;
+        case 3:
+            tag_name = "forest";
+            break;
+        }
+
+        QStandardItem* tag = new QStandardItem(tag_name);
+
+        tag->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        tag->setData(Qt::Unchecked, Qt::CheckStateRole);
+
+        tags_checkboxes.setItem(i, 0, tag);
+    }
+
+    // filter dropdown
+    QComboBox* filter = new QComboBox();
+    filter->setModel(&tags_checkboxes);
+
+
+    // filter hardwired
+    tags_layout->set_thumbnails(thumbnails_layout);
+    filter->connect(filter, SIGNAL(activated(int)), tags_layout, SLOT (filter()));
+
 
     // add widgets to RHS
     right_layout->addWidget(filter);

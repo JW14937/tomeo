@@ -32,7 +32,6 @@ public:
         mTimer = new QTimer(NULL);
         mTimer->setInterval(1000); // 1000ms is one second between ...
         mTimer->start();
-        //connect( mTimer, SIGNAL (timeout()), SLOT ( shuffle() ) ); // ...running shuffle method
     }
 
     // all buttons have been setup, store pointers here
@@ -55,8 +54,6 @@ public slots:
     void prevVid();
     void slow();
     void zoom();
-    void tagging();
-    void writeToFile(QString timeInput, QString commentInput);
 
 signals:
     void updated_video();

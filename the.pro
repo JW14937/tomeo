@@ -11,7 +11,7 @@ SOURCES += \
         add_timestamp.cpp \
         description.cpp \
         fullscreen.cpp \
-        tagging.cpp \
+        tags.cpp \
         the_button.cpp \
         the_player.cpp \
         timestamps.cpp \
@@ -21,7 +21,7 @@ HEADERS += \
     add_timestamp.h \
     description.h \
     fullscreen.h \
-    tagging.h \
+    tags.h \
     the_button.h \
     the_player.h \
     timestamps.h

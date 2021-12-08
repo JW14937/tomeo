@@ -19,8 +19,13 @@ void Timestamps::add_timestamp() {
     QLabel* comment = new QLabel();
     comment->setText(comment_input);
 
-    addWidget(time, nr_timestamps, 0);
-    addWidget(comment, nr_timestamps, 1, 1, 5);
+    QPushButton* delete_stamp = new QPushButton();
+    delete_stamp->setText("X");
+    delete_stamp->setMaximumWidth(20);
+    addWidget(delete_stamp, nr_timestamps, 0);
+    addWidget(time, nr_timestamps, 1, 1, 1);
+    addWidget(comment, nr_timestamps, 2, 1, 5);
+
     nr_timestamps++;
 }
 
@@ -69,8 +74,12 @@ void Timestamps::load_from_file() {
             line = in.readLine();
             QLabel* comment = new QLabel();
             comment->setText(line);
-            addWidget(time, i, 0);
-            addWidget(comment, i, 1, 1, 5);
+            QPushButton* delete_stamp = new QPushButton();
+            delete_stamp->setText("X");
+            delete_stamp->setMaximumWidth(20);
+            addWidget(delete_stamp, i, 0);
+            addWidget(time, i, 1, 1, 1);
+            addWidget(comment, i, 2, 1, 5);
             i++;
         }
 
