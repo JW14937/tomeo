@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
     QGridLayout *top = new QGridLayout();
     window.setLayout(top);
     window.setWindowTitle("tomeo");
-    window.setMinimumSize(800, 850);
+    window.setMinimumSize(800, 550);
 
 
 

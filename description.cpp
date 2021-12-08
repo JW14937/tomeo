@@ -27,11 +27,11 @@ void Description::load_from_file() {
     int name_start = video_path.lastIndexOf("/");
     if(name_start == -1) name_start = video_path.lastIndexOf("\\");
     if(name_start == -1) name_start = 0;
-    QString video_name = video_path.right(video_path.length() - (name_start+1));
+    QString video_name = video_path.right(video_path.length() - (name_start));
 
-    title = new QString(video_name);
+    title = new QString(video_name.right(video_name.length()-1));
 
-    QString desc_path = *vid_location + "\\" + video_name.left(video_name.length()-4) + "_desc.txt";
+    QString desc_path = *vid_location + video_name.left(video_name.length()-4) + "_desc.txt";
     QFile file(desc_path);
 
     description = new QString("");

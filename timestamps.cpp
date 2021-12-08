@@ -57,8 +57,9 @@ void Timestamps::load_from_file() {
     int name_start = video_path.lastIndexOf("/");
     if(name_start == -1) name_start = video_path.lastIndexOf("\\");
     if(name_start == -1) name_start = 0;
-    QString video_name = video_path.right(video_path.length() - (name_start+1));
-    QString stamp_path = *vid_location + "\\" + video_name.left(video_name.length()-4) + "_stamp.txt";
+    QString video_name = video_path.right(video_path.length() - (name_start));
+    QString stamp_path = *vid_location + video_name.left(video_name.length()-4) + "_stamp.txt";
+
     QFile file(stamp_path);
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
