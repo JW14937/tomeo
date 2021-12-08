@@ -9,6 +9,7 @@ CONFIG += c++11
 
 SOURCES += \
         add_timestamp.cpp \
+        description.cpp \
         fullscreen.cpp \
         tagging.cpp \
         the_button.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     add_timestamp.h \
+    description.h \
     fullscreen.h \
     tagging.h \
     the_button.h \

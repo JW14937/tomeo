@@ -36,6 +36,9 @@
 #include "tagging.h"
 #include "timestamps.h"
 #include "add_timestamp.h"
+#include "description.h"
+
+int nr_videos = 0;
 
 // read in videos and thumbnails to this directory
 std::vector<TheButtonInfo> getInfoIn (std::string loc) {
@@ -60,6 +63,7 @@ std::vector<TheButtonInfo> getInfoIn (std::string loc) {
                 QImageReader *imageReader = new QImageReader(thumb);
                     QImage sprite = imageReader->read(); // read the thumbnail
                     if (!sprite.isNull()) {
+                        nr_videos++;
                         QIcon* ico = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
                         QUrl* url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
                         out . push_back(TheButtonInfo( url , ico  ) ); // add to the output list
@@ -177,12 +181,13 @@ int main(int argc, char *argv[]) {
     add_tag->connect(add_tag, SIGNAL(clicked()), player, SLOT(tagging()));
 
     // title and description
-    QLineEdit* title = new QLineEdit();
-    title->setPlaceholderText("Video title");
 
-    QTextEdit* desc = new QTextEdit();
-    desc->setPlaceholderText("Video description");
-    desc->setFixedHeight(70);
+    Description* description_layout = new Description();
+    QWidget* description_widget = new QWidget();
+    description_layout->set_player(player);
+    description_layout->set_vid_location(QString::fromStdString(std::string(argv[1])));
+    player->connect(player, SIGNAL(updated_video()), description_layout, SLOT(load_from_file()));
+    description_widget->setLayout(description_layout);
 
     // display timestamps
 
@@ -217,10 +222,9 @@ int main(int argc, char *argv[]) {
     left_layout->setVerticalSpacing(10);
     left_layout->addWidget(videoWidget, 0,0,1,3);
     left_layout->addWidget(video_butts, 1,0,1,3);
-    left_layout->addWidget(title, 2,0,1,3);
-    left_layout->addWidget(desc, 3,0,1,3);
-    left_layout->addWidget(timestamps_scroll, 5,0,1,3);
-    left_layout->addWidget(add_stamp_widget, 6,0,1,1);
+    left_layout->addWidget(description_widget, 2,0,1,3);
+    left_layout->addWidget(add_stamp_widget, 3,0,1,3);
+    left_layout->addWidget(timestamps_scroll, 4,0,1,3);
 
 
     // RIGHT HAND SIDE
@@ -263,17 +267,21 @@ int main(int argc, char *argv[]) {
     thumbnails_widget->setLayout(thumbnails_layout);
 
     // create the thumbnails
-    for ( int i = 0; i < 6; i++ ) {
+    for ( int i = 0; i < nr_videos; i++ ) {
         TheButton *thumbnail = new TheButton(thumbnails_widget);
         thumbnail->connect(thumbnail, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
         thumbnails.push_back(thumbnail);
         thumbnails_layout->addWidget(thumbnail);
-        // title
-        QLineEdit *title = new QLineEdit();
-        title->setPlaceholderText("Video title");
-        title->setReadOnly(true);
-        thumbnails_layout->addWidget(title);
         thumbnail->init(&videos.at(i));
+        // title
+        QLabel *title = new QLabel();
+        QString video_path = thumbnail->info->url->toString();
+        int name_start = video_path.lastIndexOf("/");
+        if(name_start == -1) name_start = video_path.lastIndexOf("\\");
+        if(name_start == -1) name_start = 0;
+        QString video_name = video_path.right(video_path.length() - (name_start+1));
+        title->setText(video_name);
+        thumbnails_layout->addWidget(title);
     }
 
     // tell the player what thumbnails and videos are available

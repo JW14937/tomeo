@@ -2,7 +2,7 @@
 #include "the_player.h"
 #include "the_button.h"
 
-fullscreen::fullscreen(){
+Fullscreen::Fullscreen(){
     QWidget* window = new QWidget;
     QVBoxLayout* layout = new QVBoxLayout();
 

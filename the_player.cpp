@@ -46,7 +46,7 @@ void ThePlayer::jumpTo (TheButtonInfo* button) {
     play();
 }
 void ThePlayer::fullscreen(){
-    class fullscreen* test = new class fullscreen();
+    class Fullscreen* test = new class Fullscreen();
     test->setModal(true);
 }
 void ThePlayer::nextVid(){

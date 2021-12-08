@@ -11,9 +11,9 @@
 #include <the_player.h>
 
 extern TheButtonInfo* currVid;
-class fullscreen: public QDialog{
+class Fullscreen: public QDialog{
 public:
-    fullscreen();
+    Fullscreen();
 };
 
 #endif // FULLSCREEN_H

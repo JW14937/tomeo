@@ -16,9 +16,8 @@ void Timestamps::add_timestamp() {
 
     QPushButton* time = new QPushButton();
     time->setText(time_input);
-    QLineEdit* comment = new QLineEdit();
-    comment->setPlaceholderText(comment_input);
-    comment->setReadOnly(true);
+    QLabel* comment = new QLabel();
+    comment->setText(comment_input);
 
     addWidget(time, nr_timestamps, 0);
     addWidget(comment, nr_timestamps, 1, 1, 5);
@@ -50,7 +49,11 @@ void Timestamps::load_from_file() {
     // load the timestamps file
 
     QString video_path = *player->currently_playing;
-    QString stamp_path = *vid_location + "\\" + (video_path.right(5)).at(0) + "_stamp.txt";
+    int name_start = video_path.lastIndexOf("/");
+    if(name_start == -1) name_start = video_path.lastIndexOf("\\");
+    if(name_start == -1) name_start = 0;
+    QString video_name = video_path.right(video_path.length() - (name_start+1));
+    QString stamp_path = *vid_location + "\\" + video_name.left(video_name.length()-4) + "_stamp.txt";
     QFile file(stamp_path);
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -64,9 +67,8 @@ void Timestamps::load_from_file() {
             time->setText(line);
             time->setFixedWidth(100);
             line = in.readLine();
-            QLineEdit* comment = new QLineEdit();
-            comment->setPlaceholderText(line);
-            comment->setReadOnly(true);
+            QLabel* comment = new QLabel();
+            comment->setText(line);
             addWidget(time, i, 0);
             addWidget(comment, i, 1, 1, 5);
             i++;

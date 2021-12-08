@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QDebug>
 #include <QFile>
+#include <QLabel>
 #include "the_player.h"
 #include "add_timestamp.h"
 
