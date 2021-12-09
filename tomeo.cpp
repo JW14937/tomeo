@@ -291,7 +291,7 @@ int main(int argc, char *argv[]) {
     // tags checkboxes
     QStandardItemModel tags_checkboxes(3, 1);
 
-    QStandardItem* select_tag_prompt = new QStandardItem(QString("-- Select tags --").arg(0));
+    QStandardItem* select_tag_prompt = new QStandardItem(QString("-- Select tags --"));
     tags_checkboxes.setItem(0, 0, select_tag_prompt);
 
     for (int i=1; i<=3; i++) {
