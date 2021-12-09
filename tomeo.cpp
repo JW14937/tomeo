@@ -88,6 +88,11 @@ int main(int argc, char *argv[]) {
 
     // create the Qt Application
     QApplication app(argc, argv);
+    QString path = QString::fromStdString(std::string(argv[1]));
+    QFile file(path.left(path.length() - 6) + "stylesheet.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    app.setStyleSheet(styleSheet);
 
     // collect all the videos in the folder
     std::vector<TheButtonInfo> videos;
