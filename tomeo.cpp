@@ -267,7 +267,7 @@ int main(int argc, char *argv[]) {
     thumbnails_widget->setLayout(thumbnails_layout);
 
     // create the thumbnails
-    for ( int i = 0; i < nr_videos; i++ ) {
+    for ( int i = 0; i < 6; i++ ) {
         TheButton *thumbnail = new TheButton(thumbnails_widget);
         thumbnail->connect(thumbnail, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
         thumbnails.push_back(thumbnail);
